@@ -16,7 +16,6 @@
   apt:
     name: "nodejs"
     state: latest
-    update_cache: yes    
 
 - name: "Install Node.js 13"
   shell: |

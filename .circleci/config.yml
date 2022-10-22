@@ -168,7 +168,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: orbss/ansible-playbook@0.0.5
+      - image: cimg/python:3.10
     steps:
       - checkout
       - add_ssh_keys:
@@ -176,10 +176,8 @@ jobs:
               fingerprints: ["c7:a8:18:74:31:39:36:7c:b3:64:fc:ff:c6:95:d4:ec"]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install dependencies
-          command: |
-            apt-get install awscli -y
+      - install_awscli
+      - install_ansible
       - run:
           name: Configure server
           command: |

@@ -1,34 +1,21 @@
-# - name: "Configure backend server"
-#   become: true
-#   apt:
-#     upgrade: yes
-#     update_cache: yes
-
-- name: "install npm"
+- name: "Configure backend server"
   become: true
   apt:
-    name:  "npm"
-    state: latest
+    upgrade: yes
     update_cache: yes
 
-# - name: "install nodejs"
-#   become: true
-#   apt:
-#     name: "nodejs"
-#     state: latest
+- name: "Install Node.js 13"
+  shell: |
+    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+    sudo apt-get install -y nodejs
+    sudo npm install -g n
+    sudo n 13.8.0
 
-# - name: "Install Node.js 13"
-#   shell: |
-#     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-#     sudo apt-get install -y nodejs
-#     sudo npm install -g n
-#     sudo n 13.8.0
-
-# - name: "install pm2"
-#   become: true
-#   npm:
-#     name: pm2
-#     global: yes
-#     production: yes
-#     state: present
+- name: "Install PM2"
+  become: true
+  npm:
+    name: pm2
+    global: yes
+    production: yes
+    state: present
 

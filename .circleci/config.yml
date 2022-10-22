@@ -176,8 +176,11 @@ jobs:
               fingerprints: ["c7:a8:18:74:31:39:36:7c:b3:64:fc:ff:c6:95:d4:ec"]
       - attach_workspace:
           at: ~/
-      - install_awscli
-      - install_ansible
+      - run:
+          name: Install dependencies
+          command: |
+            python3 -m pip install --user ansible 
+            apt-get install awscli -y
       - run:
           name: Configure server
           command: |

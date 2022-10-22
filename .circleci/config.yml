@@ -180,7 +180,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            sudo apt-get install awscli -y
+            apt-get install awscli -y
       - run:
           name: Configure server
           command: |
@@ -314,11 +314,11 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      - deploy-infrastructure:
-          # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [main]
+      # - deploy-infrastructure:
+      #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      #     filters:
+      #       branches:
+      #         only: [main]
       - configure-infrastructure:
           requires: [deploy-infrastructure]
       # - run-migrations:

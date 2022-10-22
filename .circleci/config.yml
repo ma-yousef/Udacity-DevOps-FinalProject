@@ -168,7 +168,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: cimg/python:3.10
+      - image: orbss/ansible-playbook@0.0.5
     steps:
       - checkout
       - add_ssh_keys:
@@ -179,9 +179,6 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update -y
-            pip install --upgrade pip
-            pip install ansible 
             apt-get install awscli -y
       - run:
           name: Configure server

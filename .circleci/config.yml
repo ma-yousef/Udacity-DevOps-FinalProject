@@ -180,7 +180,7 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            yum install awscli -y
+            pip install awscli -y
       - run:
           name: Configure server
           command: |

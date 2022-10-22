@@ -180,7 +180,8 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            apt-get install awscli -y
+            sudo apt-get update
+            sudo apt-get install awscli -y
       - run:
           name: Configure server
           command: |

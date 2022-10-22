@@ -1,8 +1,8 @@
-- name: "Configure backend server"
-  become: true
-  apt:
-    upgrade: yes
-    update_cache: yes
+# - name: "Configure backend server"
+#   become: true
+#   apt:
+#     upgrade: yes
+#     update_cache: yes
 
 - name: "install npm"
   become: true

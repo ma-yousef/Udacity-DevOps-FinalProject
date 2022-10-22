@@ -179,9 +179,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            pip install --upgrade pip
-            pip install ansible
-            apt-get install awscli
+            sudo apt-get update -y
+            pip install ansible 
+            apt-get install awscli -y
       - run:
           name: Configure server
           command: |

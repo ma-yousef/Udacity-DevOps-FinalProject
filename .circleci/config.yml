@@ -180,12 +180,12 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            #pip install awscli
+            pip install awscli
       - run:
           name: Configure server
           command: |
              cd .circleci/ansible
-             echo "44.210.92.130" >> inventory.txt
+             #echo "3.86.231.48" >> inventory.txt
              cat inventory.txt
              ansible-playbook -i inventory.txt configure-server.yml
       # - destroy-environment     
@@ -316,13 +316,13 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      # - deploy-infrastructure:
+      - deploy-infrastructure:
       #     requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          # filters:
-          #   branches:
-          #     only: [main]
-      - configure-infrastructure
-          #  requires: [deploy-infrastructure]
+          filters:
+            branches:
+              only: [main]
+      - configure-infrastructure:
+           requires: [deploy-infrastructure]
       # - run-migrations:
       #     requires: [configure-infrastructure]
       # - deploy-frontend:

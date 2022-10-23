@@ -34,6 +34,39 @@ commands:
               npm install
               npm run migration:revert
             fi
+
+  install-nodejs:            
+    description: Install Node.js 13.8
+    steps:
+      - run:
+          name: Install Node.js 13.8
+          command: |
+              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+              sudo npm install -g n
+              sudo n 13.8.0
+
+  install-awscli:            
+    description: Install AWS CLI
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: sudo apt-get install awscli
+  
+  get-backend-ip:
+    description: GET Backend Server IP
+    parameters:
+      workflow-id:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - run:
+          name: GET Backend Server IP
+          command:  aws ec2 describe-instances \
+                      --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                      --filters "Name=tag:Name,Values=backend-<< parameters.workflow-id >>" \
+                      --output text        
+
             
 jobs:
   build-frontend:
@@ -198,13 +231,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-      - run:
-          name: Install Node.js 13.8
-          command: |
-              curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-              sudo npm install -g n
-              sudo n 13.8.0
+      - install-awscli
       - run:
           name: Run migrations
           command: |
@@ -221,26 +248,33 @@ jobs:
             fi
       - revert-migrations    
 
-#   deploy-frontend:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Get backend url
-#           command: |
-#             # your code here
-#             export API_URL="http://${BACKEND_IP}:3030"
-#             echo "${API_URL}"
-#       - run:
-#           name: Deploy frontend objects
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure      
+  deploy-frontend:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - install-nodejs
+      - install-awscli
+      - run:
+          name: Get backend url
+          command: |
+            BACKEND_IP=$(get-backend-ip)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+      - run:
+          name: Deploy frontend objects
+          command: |
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+      - destroy-environment 
+      - revert-migrations       
                     
 #   deploy-backend:
 #     docker:
@@ -337,10 +371,10 @@ workflows:
       #         only: [main]
       # - configure-infrastructure:
       #      requires: [deploy-infrastructure]
-      - run-migrations
+      # - run-migrations
           # requires: [configure-infrastructure]
-      # - deploy-frontend:
-      #     requires: [run-migrations]
+      - deploy-frontend
+          # requires: [run-migrations]
       # - deploy-backend:
       #     requires: [run-migrations]
       # - smoke-test:

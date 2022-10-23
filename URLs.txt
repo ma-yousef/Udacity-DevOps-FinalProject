@@ -1,2 +1,3 @@
 [URL01]
-http://udapeople-a709dcb.s3-website-us-east-1.amazonaws.com
+Provide a URL to your public GitHub repository. [URL01]
+Provide the public URL for your S3 Bucket (aka, your front-end). [URL02]

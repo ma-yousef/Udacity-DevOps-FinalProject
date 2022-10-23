@@ -275,9 +275,7 @@ jobs:
                       --query 'Reservations[*].Instances[*].PublicIpAddress' \
                       --filters "Name=tag:Name,Values=backend-a709dcb" \
                       --output text)
-            export API_URL="http://$BACKEND_IP:3030"
-            echo "API_URL = ${API_URL}"
-            echo ${API_URL} > frontend/.env
+            echo "API_URL=http://$BACKEND_PUBLIC_IP:3030" > frontend/.env
             cat frontend/.env
       - run:
           name: Deploy frontend objects

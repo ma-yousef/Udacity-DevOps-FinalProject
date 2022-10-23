@@ -322,7 +322,7 @@ jobs:
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            echo "54.226.99.252">> inventory.txt
+            echo "34.239.110.212">> inventory.txt
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment 

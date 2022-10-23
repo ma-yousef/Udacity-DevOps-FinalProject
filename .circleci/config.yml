@@ -52,6 +52,17 @@ commands:
       - run:
           name: Install AWS CLI
           command: sudo apt-get install awscli
+
+  install-ansible:            
+    description: Install AWS CLI
+    steps:
+      - run:
+          name: Install AWS CLI
+          command: |
+            sudo apt update
+            sudo apt install software-properties-common
+            sudo add-apt-repository --yes --update ppa:ansible/ansible
+            sudo apt install ansible
   
   get-backend-ip:
     description: GET Backend Server IP
@@ -290,13 +301,7 @@ jobs:
           fingerprints: ["c7:a8:18:74:31:39:36:7c:b3:64:fc:ff:c6:95:d4:ec"]
       - attach_workspace:
           at: ~/
-      - run:
-          name: Install Ansible
-          command: |
-            sudo apt update
-            sudo apt install software-properties-common
-            sudo add-apt-repository --yes --update ppa:ansible/ansible
-            sudo apt install ansible
+      - install-ansible
       - install-nodejs
       - run:
           name: Deploy backend
@@ -305,13 +310,13 @@ jobs:
             npm i
             npm run build
             cd ..
-            # Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
-            cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            echo "54.226.99.252">> inventory.txt
-            cat inventory.txt
+            #  Zip the directory
+            # tar -C backend -czvf artifact.tar.gz .
+            # cd .circleci/ansible
+            # echo "Contents  of the inventory.txt file is -------"
+            # cat inventory.txt
+            # echo "54.226.99.252">> inventory.txt
+            # cat inventory.txt
             #ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment 
       - revert-migrations      

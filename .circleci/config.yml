@@ -292,7 +292,7 @@ jobs:
           at: ~/
       - run:
           name: Install Ansible
-          command: sudo apt-get install ansible
+          command: sudo apt install ansible
       - install-nodejs
       - run:
           name: Deploy backend

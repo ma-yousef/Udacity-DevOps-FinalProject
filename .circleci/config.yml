@@ -310,7 +310,7 @@ jobs:
             npm i
             npm run build
             #  Zip the directory
-            tar -C backend -czvf artifact.tar.gz .
+            tar -czf artifact.tar.gz dist/* package*
             cd ..
             cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
       - run:

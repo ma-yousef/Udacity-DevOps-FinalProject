@@ -300,9 +300,9 @@ jobs:
           fingerprints: ["c7:a8:18:74:31:39:36:7c:b3:64:fc:ff:c6:95:d4:ec"]
       - attach_workspace:
           at: ~/
-      - install-awscli
       - install-ansible
       - install-nodejs
+      - install-awscli
       - run:
           name: Backend packaging
           command: |

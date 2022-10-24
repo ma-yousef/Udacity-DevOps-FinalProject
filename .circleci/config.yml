@@ -315,7 +315,7 @@ jobs:
           name: Install dependencies
           command: |
             pip install awscli    
-            export PYCURL_CURL_CONFIG=/usr/local/bin/curl-config
+            python setup.py install --curl-config=/usr/local/bin/curl-config
             pip install pycurl
       # - run:
       #     name: Get backend url

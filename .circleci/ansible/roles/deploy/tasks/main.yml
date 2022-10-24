@@ -9,6 +9,18 @@
     src: artifact.tar.gz
     dest: ~/backend-app
 
+- name: "Set environment variables"
+  shell: |
+      echo "TYPEORM_CONNECTION=${TYPEORM_CONNECTION}" > ~/backend-app/dist/.env  
+      echo "TYPEORM_ENTITIES=${TYPEORM_ENTITIES}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_HOST=${TYPEORM_HOST}" >> ~/backend-app/dist/.env      
+      echo "TYPEORM_PORT=${TYPEORM_PORT}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_USERNAME=${TYPEORM_USERNAME}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_PASSWORD=${TYPEORM_PASSWORD}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_DATABASE=${TYPEORM_DATABASE}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}" >> ~/backend-app/dist/.env    
+      echo "TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}" >> ~/backend-app/dist/.env       
+
 - name: "Installing Node Dependencies"
   shell: |
     cd ~/backend-app

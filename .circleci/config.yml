@@ -54,10 +54,10 @@ commands:
           command: sudo apt-get install awscli
 
   install-ansible:            
-    description: Install AWS CLI
+    description: Install Ansible
     steps:
       - run:
-          name: Install AWS CLI
+          name: Install Ansible
           command: |
             sudo apt update
             sudo apt install software-properties-common
@@ -211,30 +211,13 @@ jobs:
           name: Install dependencies
           command: |
             apk add --update ansible
-            pip install awscli
-      - run:
-          name: Set environment variables
-          command: |
-            echo "TYPEORM_CONNECTION=${TYPEORM_CONNECTION}" > backend/.env  
-            echo "TYPEORM_ENTITIES=${TYPEORM_ENTITIES}" >> backend/.env  
-            echo "TYPEORM_HOST=${TYPEORM_HOST}" >> backend/.env  
-            echo "TYPEORM_PORT=${TYPEORM_PORT}" >> backend/.env  
-            echo "TYPEORM_USERNAME=${TYPEORM_USERNAME}" >> backend/.env  
-            echo "TYPEORM_PASSWORD=${TYPEORM_PASSWORD}" >> backend/.env  
-            echo "TYPEORM_DATABASE=${TYPEORM_DATABASE}" >> backend/.env  
-            echo "TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}" >> backend/.env  
-            echo "TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}" >> backend/.env 
-            cat backend/.env            
+            pip install awscli          
       - run:
           name: Configure server
           command: |
              cd .circleci/ansible
              cat inventory.txt
              ansible-playbook -i inventory.txt configure-server.yml
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - project/backend/.env
       - destroy-environment     
 
   run-migrations:

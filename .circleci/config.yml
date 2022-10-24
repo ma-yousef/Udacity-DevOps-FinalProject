@@ -218,6 +218,8 @@ jobs:
              cd .circleci/ansible
              cat inventory.txt
              ansible-playbook -i inventory.txt configure-server.yml
+             cd ../../backend
+             ls -a
       - destroy-environment     
 
   run-migrations:
@@ -283,6 +285,7 @@ jobs:
           fingerprints: ["c7:a8:18:74:31:39:36:7c:b3:64:fc:ff:c6:95:d4:ec"]
       - attach_workspace:
           at: ~/
+      - install-awscli
       - install-ansible
       - install-nodejs
       - run:
@@ -388,11 +391,11 @@ workflows:
            requires: [deploy-infrastructure]
       # - run-migrations
           # requires: [configure-infrastructure]
-      - deploy-frontend:
-          requires: [configure-infrastructure]
+      #- deploy-frontend:
+          # requires: [configure-infrastructure]
           # requires: [run-migrations]
-      - deploy-backend:
-          requires: [configure-infrastructure]
+      #- deploy-backend:
+          # requires: [configure-infrastructure]
       #     requires: [run-migrations]
       # - smoke-test:
       #     requires: [deploy-backend, deploy-frontend]

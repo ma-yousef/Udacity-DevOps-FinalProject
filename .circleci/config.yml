@@ -12,6 +12,7 @@ commands:
           name: Destroy environments
           when: on_fail
           command: |
+            aws s3 rm s3://udapeople-<< parameters.workflow-id >> --recursive
             aws cloudformation delete-stack --stack-name  udapeople-backend-<< parameters.workflow-id >>
             aws cloudformation delete-stack --stack-name  udapeople-frontend-<< parameters.workflow-id >>
 
@@ -316,19 +317,13 @@ jobs:
           command: |
             pip install awscli    
             apk --no-cache add curl
-      # - run:
-      #     name: Get backend url
-      #     command: |
-      #       export BACKEND_IP=$(aws ec2 describe-instances \
-      #                 --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #                 --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-      #                 --output text)
-            
       - run:
           name: Backend smoke test.
           command: |
-              export BACKEND_IP="54.89.214.90"
-              echo $BACKEND_IP
+              export BACKEND_IP=$(aws ec2 describe-instances \
+                      --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                      --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+                      --output text)
               if curl "http://${BACKEND_IP}:3030/api/status" | grep "ok"
               then
                   return 0

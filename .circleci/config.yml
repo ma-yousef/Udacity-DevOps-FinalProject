@@ -315,7 +315,7 @@ jobs:
           name: Install dependencies
           command: |
             pip install awscli    
-            python-pycurl libcurl4-openssl-dev libssl-dev
+            export PYCURL_CURL_CONFIG=/usr/local/bin/curl-config
             pip install pycurl
       # - run:
       #     name: Get backend url

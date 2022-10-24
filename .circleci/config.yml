@@ -63,20 +63,6 @@ commands:
             sudo apt install software-properties-common
             sudo add-apt-repository --yes --update ppa:ansible/ansible
             sudo apt install ansible
-  
-  get-backend-ip:
-    description: GET Backend Server IP
-    parameters:
-      workflow-id:
-        type: string
-        default: ${CIRCLE_WORKFLOW_ID:0:7}
-    steps:
-      - run:
-          name: GET Backend Server IP
-          command:  aws ec2 describe-instances \
-                      --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                      --filters "Name=tag:Name,Values=backend-<< parameters.workflow-id >>" \
-                      --output text        
 
             
 jobs:
@@ -230,7 +216,6 @@ jobs:
           name: Configure server
           command: |
              cd .circleci/ansible
-             #echo "44.206.226.238" >> inventory.txt
              cat inventory.txt
              ansible-playbook -i inventory.txt configure-server.yml
       - destroy-environment     
@@ -273,7 +258,7 @@ jobs:
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances \
                       --query 'Reservations[*].Instances[*].PublicIpAddress' \
-                      --filters "Name=tag:Name,Values=backend-a709dcb" \
+                      --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
                       --output text)
             echo "API_URL=http://$BACKEND_IP:3030" > frontend/.env
             cat frontend/.env
@@ -284,8 +269,7 @@ jobs:
             npm install
             npm run build
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
-            #aws s3 cp dist s3://udapeople-a709dcb${CIRCLE_WORKFLOW_ID:0:7} --recursive
-            aws s3 cp dist s3://udapeople-a709dcb --recursive
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive            
       - destroy-environment 
       - revert-migrations       
                     
@@ -321,8 +305,6 @@ jobs:
             export TYPEORM_MIGRATIONS=./migrations/*.ts
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
-            cat inventory.txt
-            echo "34.239.110.212">> inventory.txt
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       - destroy-environment 
@@ -399,16 +381,16 @@ workflows:
       #     requires: [build-backend]
       # - scan-frontend:
       #     requires: [build-frontend]
-      # - deploy-infrastructure:
+      - deploy-infrastructure
       #     # requires: [test-frontend, test-backend, scan-frontend, scan-backend]
       #     filters:
       #       branches:
       #         only: [main]
-      # - configure-infrastructure:
-      #      requires: [deploy-infrastructure]
+      - configure-infrastructure:
+           requires: [deploy-infrastructure]
       # - run-migrations
           # requires: [configure-infrastructure]
-       - deploy-frontend
+      # - deploy-frontend
           # requires: [run-migrations]
       #- deploy-backend:
       #     requires: [run-migrations]

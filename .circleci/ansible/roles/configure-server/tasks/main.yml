@@ -4,11 +4,6 @@
     upgrade: yes
     update_cache: yes
 
-- name: "Set environment variables"
-  shell: |
-    export TYPEORM_MIGRATIONS_DIR="${TYPEORM_CONNECTION}" 
-    export TYPEORM_DATABASE="UdaPeopleDB"
-
 - name: "Install Node.js 13"
   shell: |
     curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -

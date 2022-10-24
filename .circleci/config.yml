@@ -314,8 +314,8 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apt install libcurl4-openssl-dev libssl-dev
             pip install awscli    
+            python-pycurl libcurl4-openssl-dev libssl-dev
             pip install pycurl
       # - run:
       #     name: Get backend url

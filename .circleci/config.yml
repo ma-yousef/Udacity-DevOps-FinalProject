@@ -327,12 +327,11 @@ jobs:
           name: Get backend url
           command: |
             export BACKEND_IP="35.174.5.162"
+            echo BACKEND_IP
       - run:
           name: Backend smoke test.
           command: |
-             export API_URL="http://${BACKEND_IP}:3030"
-              echo "${API_URL}"
-              if curl "${API_URL}/api/status" | grep "ok"
+              if curl "http://${BACKEND_IP}:3030/api/status" | grep "ok"
               then
                   return 0
               else

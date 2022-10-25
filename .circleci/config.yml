@@ -349,6 +349,8 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install tar utility
           command: |
@@ -436,5 +438,5 @@ workflows:
           requires: [deploy-backend, deploy-frontend]
       - cloudfront-update:
           requires: [smoke-test]
-      # - cleanup:
-      #     requires: [cloudfront-update]
+      - cleanup:
+          requires: [cloudfront-update]

@@ -377,24 +377,31 @@ jobs:
       - destroy-environment 
       - revert-migrations  
 
-# cleanup:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Get old stack workflow id
-#           command: |
-#             # your code here
-#             export OldWorkflowID="the id here"
-#             export STACKS=[] #put the list of stacks here
-#       - run:
-#           name: Remove old stacks and files
-#           command: |
-#             if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
-#             then
-#               # your code here
-#             fi
+cleanup:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - run:
+          name: Install tar utility
+          command: |
+            yum install -y tar gzip
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Get old stack workflow id
+          command: |
+            cat OldworkflowID.txt
+            # your code here
+            #export OldWorkflowID="the id here"
+            #export STACKS=[] #put the list of stacks here
+      # - run:
+      #     name: Remove old stacks and files
+      #     command: |
+      #       if [[ "${STACKS[@]}" =~ "${OldWorkflowID}" ]]
+      #       then
+      #         # your code here
+      #       fi
             
 
 workflows:

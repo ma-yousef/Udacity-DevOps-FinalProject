@@ -394,15 +394,9 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Get old stack workflow id
-          command: |
-           
-            export OldWorkflowID=$(cat OldworkflowID.txt)
-            echo $OldWorkflowID
-            # export STACKS=[] #put the list of stacks here
-      - run:
           name: Remove old stacks and files
           command: |
+            export OldWorkflowID=$(cat OldworkflowID.txt)
             echo $OldWorkflowID
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" =~ "${OldWorkflowID}" ]]
             then

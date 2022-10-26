@@ -19,3 +19,9 @@
     production: yes
     state: present
 
+- name: update and install prometheus
+  apt:
+    name: prometheus
+    state: latest
+    update_cache: yes
+

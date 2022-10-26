@@ -1,5 +1,0 @@
-[URL01]
-https://github.com/ma-yousef/Udacity-DevOps-FinalProject/
-
-[URL02]
-Provide the public URL for your S3 Bucket (aka, your front-end). [URL02]

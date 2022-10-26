@@ -228,7 +228,7 @@ jobs:
       - checkout
       - restore_cache:
           keys: [backend-build]
-      - install-awscli
+      - install-nodejs
       - run:
           name: Run migrations
           command: |
@@ -398,7 +398,7 @@ jobs:
           command: |
             export OldWorkflowID=$(cat OldworkflowID.txt)
             echo OldworkflowID: "${OldworkflowID}
-            
+
             if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
               aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive
